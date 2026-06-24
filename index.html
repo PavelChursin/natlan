@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Natlan | Система привлечения клиентов</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231b1a19'/%3E%3Ctext x='50%25' y='55%25' text-anchor='middle' font-family='Georgia' font-size='34' fill='%23c6a87b'%3EN%3C/text%3E%3C/svg%3E">
+  <style>
+    :root {
+      --ink: #1b1a19;
+      --muted: #68635d;
+      --line: #e8e3db;
+      --paper: #ffffff;
+      --soft: #f7f5f1;
+      --gold: #c6a87b;
+      --gold-dark: #9c7c4d;
+      --green: #61745f;
+      --blue: #c7d2e9;
+      --danger: #9f5148;
+      --shadow: 0 22px 70px rgba(27, 26, 25, 0.08);
+      --max: 1280px;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      line-height: 1.55;
+      overflow-wrap: normal;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        linear-gradient(90deg, rgba(27, 26, 25, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(27, 26, 25, 0.035) 1px, transparent 1px);
+      background-size: 72px 72px;
+      opacity: 0.55;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      z-index: 50;
+      background: var(--gold);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255, 255, 255, 0.88);
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(16px);
+    }
+
+    .topbar-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 12px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      width: 36px;
+      height: 36px;
+      border: 1px solid var(--gold);
+      display: grid;
+      place-items: center;
+      color: var(--gold-dark);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 19px;
+    }
+
+    .brand small {
+      display: block;
+      color: var(--muted);
+      font-weight: 500;
+      font-size: 12px;
+      margin-top: 1px;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 11px 18px;
+      border: 1px solid var(--gold);
+      color: var(--paper);
+      background: var(--gold);
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-1px);
+      background: var(--gold-dark);
+      border-color: var(--gold-dark);
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--ink);
+      border-color: var(--line);
+    }
+
+    .layout {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 22px;
+      display: grid;
+      grid-template-columns: 190px minmax(0, 1fr);
+      gap: 56px;
+    }
+
+    .side-nav {
+      position: sticky;
+      top: 70px;
+      align-self: start;
+      max-height: calc(100vh - 86px);
+      overflow: auto;
+      padding: 14px 0 24px;
+      border-right: 1px solid var(--line);
+    }
+
+    .side-nav p {
+      margin: 0 10px 10px 0;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .side-nav a {
+      display: block;
+      padding: 6px 8px 6px 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.32;
+      border-right: 2px solid transparent;
+      white-space: nowrap;
+    }
+
+    .side-nav a.active,
+    .side-nav a:hover {
+      color: var(--ink);
+      border-right-color: var(--gold);
+    }
+
+    main {
+      min-width: 0;
+    }
+
+    .hero {
+      min-height: 620px;
+      display: flex;
+      align-items: center;
+      padding: 70px 0 64px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 22px;
+      color: var(--gold-dark);
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 34px;
+      height: 1px;
+      background: var(--gold);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-weight: 400;
+      line-height: 1.06;
+    }
+
+    h1 {
+      max-width: 880px;
+      font-size: clamp(38px, 3.6vw, 58px);
+      line-height: 1.12;
+    }
+
+    h2 {
+      font-size: clamp(30px, 3vw, 48px);
+      max-width: 820px;
+    }
+
+    h3 {
+      font-size: 23px;
+    }
+
+    .lead {
+      max-width: 820px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    section {
+      padding: 68px 0;
+      border-bottom: 1px solid var(--line);
+      scroll-margin-top: 86px;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 68px minmax(0, 1fr);
+      gap: 22px;
+      align-items: start;
+      margin-bottom: 30px;
+    }
+
+    .section-number {
+      color: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .section-summary {
+      max-width: 820px;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.four {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 22px;
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    .card.dark {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    .card.soft {
+      background: var(--soft);
+    }
+
+    .card.gold {
+      background: var(--gold);
+      color: var(--paper);
+      border-color: var(--gold);
+    }
+
+    .card h3,
+    .card h4 {
+      margin: 0 0 12px;
+    }
+
+    .card h4 {
+      font-size: 16px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .card.dark p,
+    .card.gold p {
+      color: rgba(255, 255, 255, 0.75);
+    }
+
+    .stat {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .stat b {
+      display: block;
+      color: var(--gold-dark);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(28px, 2vw, 36px);
+      line-height: 1.08;
+      font-weight: 400;
+      margin-bottom: 10px;
+      white-space: nowrap;
+      letter-spacing: 0;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .quote {
+      margin: 26px 0;
+      padding: 26px;
+      border-left: 3px solid var(--gold);
+      background: var(--soft);
+      color: var(--ink);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 25px;
+      line-height: 1.28;
+    }
+
+    .pill-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 22px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .pill-list li {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 13px;
+      background: var(--paper);
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .plain-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .plain-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--muted);
+    }
+
+    .plain-list li:last-child {
+      border-bottom: 0;
+    }
+
+    .plain-list strong {
+      color: var(--ink);
+    }
+
+    .table-wrap {
+      overflow: visible;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      table-layout: fixed;
+      font-size: 13.5px;
+    }
+
+    th,
+    td {
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+      word-break: normal;
+    }
+
+    th {
+      background: var(--soft);
+      color: var(--ink);
+      font-size: 12px;
+      text-transform: uppercase;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    td {
+      color: var(--muted);
+    }
+
+    td strong {
+      color: var(--ink);
+    }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      counter-reset: step;
+    }
+
+    .timeline-item {
+      position: relative;
+      min-height: 218px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .timeline-item::before {
+      counter-increment: step;
+      content: "0" counter(step);
+      display: block;
+      margin-bottom: 26px;
+      color: var(--gold);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 30px;
+    }
+
+    .timeline-item h4 {
+      margin: 0 0 10px;
+      font-size: 17px;
+    }
+
+    .timeline-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .funnel {
+      display: grid;
+      gap: 10px;
+    }
+
+    .funnel-row {
+      display: grid;
+      grid-template-columns: 190px minmax(0, 1fr) 130px;
+      gap: 14px;
+      align-items: center;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .funnel-row b {
+      color: var(--ink);
+    }
+
+    .bar {
+      height: 9px;
+      border-radius: 99px;
+      background: var(--soft);
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: var(--gold);
+    }
+
+    .note {
+      margin-top: 22px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      background: var(--soft);
+      font-size: 14px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .full-width-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    #business-goal table th:nth-child(1),
+    #business-goal table td:nth-child(1) {
+      width: 34%;
+    }
+
+    #business-goal table th:nth-child(2),
+    #business-goal table td:nth-child(2) {
+      width: 16%;
+    }
+
+    #business-goal table th:nth-child(3),
+    #business-goal table td:nth-child(3) {
+      width: 22%;
+      white-space: nowrap;
+    }
+
+    #business-goal table th:nth-child(4),
+    #business-goal table td:nth-child(4) {
+      width: 28%;
+    }
+
+    .strategy-map {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding-bottom: 4px;
+    }
+
+    .stage {
+      min-width: 0;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+      overflow-wrap: anywhere;
+    }
+
+    .stage b {
+      display: block;
+      color: var(--gold-dark);
+      margin-bottom: 8px;
+      overflow-wrap: anywhere;
+    }
+
+    .stage span {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .risk-item {
+      display: grid;
+      grid-template-columns: 0.72fr 1.28fr;
+      gap: 18px;
+      align-items: start;
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .risk-item strong {
+      color: var(--ink);
+      font-size: 16px;
+    }
+
+    .risk-item p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .metric-band {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .metric {
+      min-width: 0;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--paper);
+    }
+
+    .metric b {
+      display: block;
+      color: var(--gold-dark);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 27px;
+      line-height: 1;
+      font-weight: 400;
+      white-space: nowrap;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 12.5px;
+      line-height: 1.35;
+    }
+
+    .accent-box {
+      margin-top: 24px;
+      padding: 24px;
+      border-radius: var(--radius);
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .accent-box p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 18px;
+    }
+
+    .accent-box strong {
+      color: var(--paper);
+    }
+
+    @media (max-width: 1360px) {
+      .metric-band {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+
+      .grid.four {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 980px) {
+      .layout {
+        display: block;
+      }
+
+      .side-nav {
+        display: none;
+      }
+
+      .grid.two,
+      .grid.three,
+      .grid.four,
+      .timeline,
+      .split,
+      .strategy-map,
+      .risk-grid,
+      .risk-item,
+      .metric-band {
+        grid-template-columns: 1fr;
+      }
+
+      .top-actions span {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .topbar-inner,
+      .layout {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .brand small {
+        display: none;
+      }
+
+      .hero,
+      section {
+        padding: 54px 0;
+      }
+
+      .hero {
+        min-height: auto;
+      }
+
+      h1 {
+        font-size: 32px;
+        line-height: 1.16;
+      }
+
+      .lead,
+      .section-summary {
+        font-size: 16px;
+      }
+
+      .section-head {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .funnel-row {
+        grid-template-columns: 1fr;
+      }
+
+      .table-wrap {
+        overflow: auto;
+      }
+
+      table {
+        min-width: 640px;
+        table-layout: auto;
+      }
+
+      .quote {
+        font-size: 24px;
+        padding: 22px;
+      }
+    }
+
+    @media print {
+      .topbar,
+      .side-nav,
+      .progress,
+      .hero-actions {
+        display: none;
+      }
+
+      .layout {
+        display: block;
+      }
+
+      section {
+        break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress" id="progress"></div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#top" aria-label="К началу презентации">
+        <span class="brand-mark">N</span>
+        <span>Natlan<small>Маркетинговая стратегия / 3–6 месяцев</small></span>
+      </a>
+    </div>
+  </header>
+
+  <div class="layout">
+    <aside class="side-nav" aria-label="Навигация по стратегии">
+      <p>Разделы</p>
+      <a href="#business-goal">1. Бизнес-цель</a>
+      <a href="#product">2. Что продаёт</a>
+      <a href="#point-a">3. Точка А</a>
+      <a href="#point-b">4. Точка Б</a>
+      <a href="#market">5. Рынок</a>
+      <a href="#competition">6. Конкуренты</a>
+      <a href="#audience">7. Сегменты</a>
+      <a href="#priority">8. Приоритеты</a>
+      <a href="#pains">9. Боли</a>
+      <a href="#motivations">10. Мотивации</a>
+      <a href="#positioning">11. Позиционирование</a>
+      <a href="#usp">12. УТП</a>
+      <a href="#value">13. Ценность</a>
+      <a href="#communication">14. Коммуникация</a>
+      <a href="#tone">15. Tone of Voice</a>
+      <a href="#product-matrix">16. Матрица</a>
+      <a href="#sales-funnel">17. Воронка</a>
+      <a href="#lead-magnets">18. Лид-магниты</a>
+      <a href="#site">19. Сайт</a>
+      <a href="#ads">20. Медиаплан</a>
+      <a href="#content">21. Контент</a>
+      <a href="#kpi">22. KPI</a>
+      <a href="#roadmap">23. Дорожная карта</a>
+      <a href="#risks">24. Риски</a>
+    </aside>
+
+    <main id="top">
+      <div class="hero">
+        <div>
+          <p class="eyebrow">Презентация маркетинговой стратегии Natlan</p>
+          <h1>Система привлечения клиентов для иммиграционных, юридических и релокационных услуг в Европе</h1>
+          <p class="lead">Стратегия переводит Natlan от экспертного бизнеса на рекомендациях к управляемой системе: контент и реклама приводят клиента в диагностику, диагностика продаёт стратегию, стратегия ведёт к сопровождению, продлению, ПМЖ и гражданству.</p>
+          <div class="hero-actions">
+            <a class="button" href="#business-goal">Смотреть стратегию</a>
+            <a class="button secondary" href="#roadmap">План внедрения</a>
+          </div>
+        </div>
+      </div>
+
+      <section id="business-goal">
+        <div class="section-head"><div class="section-number">01</div><div><h2>Бизнес-цель стратегии</h2><p class="section-summary">Natlan нужно перейти от экспертного бизнеса на рекомендациях к масштабируемой системе привлечения клиентов. Цель на 3 месяца — построить управляемую систему привлечения и продаж, которая стабильно приводит клиентов на консультации, диагностику и комплексное сопровождение.</p></div></div>
+        <div class="metric-band">
+          <div class="metric"><b>30+</b><span>платящих клиентов в месяц</span></div>
+          <div class="metric"><b>180&nbsp;000€</b><span>выручки в месяц</span></div>
+          <div class="metric"><b>6&nbsp;000€</b><span>средний чек</span></div>
+          <div class="metric"><b>300–500</b><span>заявок в месяц</span></div>
+          <div class="metric"><b>120–180</b><span>квалифицированных лидов</span></div>
+          <div class="metric"><b>60–90</b><span>консультаций в месяц</span></div>
+        </div>
+        <div class="accent-box"><p><strong>Главный принцип:</strong> не просто привлекать лиды, а строить путь: контент / реклама → диагностика → стратегия → сопровождение → продление / ПМЖ / гражданство.</p></div>
+        <div class="table-wrap" style="margin-top: 24px;"><table><thead><tr><th>Продуктовый поток</th><th>Клиенты / мес.</th><th>Средний чек</th><th>Роль в выручке</th></tr></thead><tbody>
+          <tr><td><strong>Комплексное ВНЖ / легализация</strong></td><td>10</td><td>5&nbsp;000–7&nbsp;000&nbsp;€</td><td>Основной продукт выручки</td></tr>
+          <tr><td><strong>Семейная релокация</strong></td><td>6</td><td>6&nbsp;000–9&nbsp;000&nbsp;€</td><td>Высокая мотивация и повторные услуги</td></tr>
+          <tr><td><strong>Business immigration</strong></td><td>4</td><td>10&nbsp;000–20&nbsp;000&nbsp;€</td><td>Высокий чек и маржинальность</td></tr>
+          <tr><td><strong>Продление / ПМЖ / гражданство</strong></td><td>5</td><td>3&nbsp;000–7&nbsp;000&nbsp;€</td><td>Горячий спрос и LTV</td></tr>
+          <tr><td><strong>Платные диагностики</strong></td><td>5+</td><td>300–800&nbsp;€</td><td>Pipeline будущих сопровождений</td></tr>
+        </tbody></table></div>
+      </section>
+
+      <section id="product">
+        <div class="section-head"><div class="section-number">02</div><div><h2>Что продаёт Natlan</h2><p class="section-summary">Natlan продаёт не документы, а понятный и законный маршрут переезда, легализации и жизни в Европе. Клиент покупает не “помощь с ВНЖ”. Он покупает ясность, безопасность, снижение риска ошибки, экспертное сопровождение и понятный план действий.</p></div></div>
+        <div class="grid three">
+          <div class="card"><h3>Маршрут</h3><p>Выбор страны и иммиграционной программы, оценка шансов, документов, бюджета и рисков.</p></div>
+          <div class="card"><h3>Стратегия и подача</h3><p>Индивидуальная иммиграционная стратегия, подготовка документов и сопровождение подачи.</p></div>
+          <div class="card"><h3>Долгий статус</h3><p>Релокация, адаптация, продление, ПМЖ, гражданство и долгосрочный статус.</p></div>
+        </div>
+        <div class="quote">Natlan превращает сложный переезд в понятный пошаговый маршрут.</div>
+      </section>
+
+      <section id="point-a">
+        <div class="section-head"><div class="section-number">03</div><div><h2>Точка А: текущее состояние</h2><p class="section-summary">У Natlan уже есть экспертность и доверие, но пока нет полноценной масштабируемой системы продаж.</p></div></div>
+        <div class="grid three"><div class="card"><h3>Что уже есть</h3><ul class="plain-list"><li>Экспертность и опыт</li><li>Сайт</li><li>Instagram / Facebook</li><li>YouTube</li><li>Telegram</li><li>Кейсы, отзывы и рекомендации</li></ul></div><div class="card"><h3>Что ограничивает рост</h3><ul class="plain-list"><li>Нет стабильной платной лидогенерации</li><li>Нет прозрачной CRM-воронки</li><li>Нет отдельных посадочных страниц по сегментам и странам</li><li>Нет системного ретаргетинга</li><li>Нет полной аналитики от заявки до оплаты</li></ul></div><div class="card soft"><h3>Рабочая оценка</h3><p>Сейчас модель может давать около <strong>5 клиентов в месяц</strong> и около <strong>25&nbsp;000&nbsp;€ выручки</strong>, но рост ограничен отсутствием системы.</p></div></div>
+      </section>
+
+      <section id="point-b">
+        <div class="section-head"><div class="section-number">04</div><div><h2>Точка Б: целевое состояние</h2><p class="section-summary">Через 3 месяца Natlan должен стать управляемой системой привлечения клиентов: сайт, реклама, контент, Telegram, YouTube, CRM и ретаргетинг работают на диагностику, стратегию и сопровождение.</p></div></div>
+        <div class="funnel"><div class="funnel-row"><b>Заявки</b><div class="bar"><span style="width: 100%;"></span></div><span>400–500</span></div><div class="funnel-row"><b>Qualified leads</b><div class="bar"><span style="width: 38%;"></span></div><span>150–190</span></div><div class="funnel-row"><b>Консультации</b><div class="bar"><span style="width: 18%;"></span></div><span>70–90</span></div><div class="funnel-row"><b>Клиенты</b><div class="bar"><span style="width: 7%;"></span></div><span>25–30</span></div></div>
+        <div class="grid four" style="margin-top: 24px;"><div class="stat"><b>150–180k€</b><span>выручка в месяц</span></div><div class="stat"><b>1&nbsp;200–1&nbsp;600€</b><span>CAC</span></div><div class="stat"><b>3,5–4,5x</b><span>ROAS</span></div><div class="stat"><b>3 мес.</b><span>горизонт системы</span></div></div>
+        <div class="quote">От рекомендаций и органики → к прогнозируемой системе продаж.</div>
+      </section>
+
+      <section id="market"><div class="section-head"><div class="section-number">05</div><div><h2>Анализ рынка</h2><p class="section-summary">Спрос на релокацию в Европу высокий, но рынок стал сложнее: клиенты ищут не обещания, а безопасный маршрут.</p></div></div><div class="grid two"><div class="card"><h3>Что происходит на рынке</h3><ul class="plain-list"><li>Люди хотят легальный статус в Европе</li><li>Семьи ищут безопасность, образование и медицину</li><li>Предприниматели ищут запасной план, бизнес и защиту капитала</li><li>Remote specialists хотят жить легально, работая удалённо</li><li>Люди уже в Европе ищут продление, ПМЖ и гражданство</li></ul></div><div class="card"><h3>Что усложняет рынок</h3><ul class="plain-list"><li>Изменения иммиграционных правил</li><li>Рост требований к доходу и документам</li><li>Ужесточение инвестиционных программ</li><li>Недоверие к агентствам</li><li>Высокая цена ошибки</li></ul></div></div><div class="note">Побеждает не тот, кто обещает “быстрый ВНЖ”, а тот, кто честно показывает риски и строит реалистичный маршрут.</div></section>
+
+      <section id="competition"><div class="section-head"><div class="section-number">06</div><div><h2>Анализ конкурентов</h2><p class="section-summary">Natlan должен отстроиться от агентств, блогеров, юристов и риелторов через системный подход и честную диагностику.</p></div></div><div class="grid three"><div class="card"><h3>С кем конкурируем</h3><p>Иммиграционные агентства, юридические компании, релокационные консультанты, investment immigration компании, Telegram-каналы, блогеры, фриланс-юристы, риелторы и налоговые консультанты.</p></div><div class="card"><h3>Слабые места конкурентов</h3><p>Обещания “быстро” и “гарантированно”, продажа одной популярной страны всем, слабая диагностика, непрозрачный процесс, мало объяснений рисков и фокус на документах.</p></div><div class="card dark"><h3>Отстройка Natlan</h3><p>Natlan — не продавец ВНЖ, а экспертный навигатор по переезду, легализации и долгосрочному статусу в Европе.</p></div></div></section>
+
+      <section id="audience"><div class="section-head"><div class="section-number">07</div><div><h2>Сегментация аудитории</h2><p class="section-summary">Нельзя говорить со всеми одинаково: у каждого сегмента своя боль, мотивация и критерий доверия. Сегментация должна идти не по возрасту, а по жизненному сценарию клиента.</p></div></div><div class="grid three"><div class="card"><h3>Семьи с детьми</h3><p>Ищут безопасность, образование, медицину, адаптацию и понятный переезд.</p></div><div class="card"><h3>Предприниматели и инвесторы</h3><p>Хотят связать ВНЖ, бизнес, налоги, капитал и семью в одной стратегии.</p></div><div class="card"><h3>Remote workers и фрилансеры</h3><p>Хотят легально жить в Европе и работать удалённо.</p></div><div class="card"><h3>Люди уже в Европе</h3><p>Нужно продлить статус, сменить основание, подготовиться к ПМЖ или гражданству.</p></div><div class="card"><h3>Рациональные клиенты</h3><p>Сравнивают консультантов, отзывы, цены и хотят честную оценку рисков.</p></div><div class="card soft"><h3>Вывод</h3><p>Маркетинг должен говорить не “всем про ВНЖ”, а каждому сегменту про его сценарий, риск и следующий шаг.</p></div></div></section>
+
+      <section id="priority"><div class="section-head"><div class="section-number">08</div><div><h2>Приоритетные сегменты</h2><p class="section-summary">Фокус нужно делать на сегменты, где есть деньги, срочность, страх ошибки и высокий чек.</p></div></div><div class="table-wrap"><table><thead><tr><th>Приоритет</th><th>Сегмент</th><th>Почему важен</th><th>Оффер входа</th></tr></thead><tbody><tr><td><strong>№1</strong></td><td>Предприниматели и инвесторы</td><td>Высокий чек, сложные кейсы, business immigration, инвестиции, налоги, капитал</td><td>Стратегия переезда для бизнеса и семьи</td></tr><tr><td><strong>№2</strong></td><td>Семьи с детьми</td><td>Сильная эмоциональная мотивация, высокий страх ошибки, комплексное сопровождение</td><td>Диагностика семейного маршрута</td></tr><tr><td><strong>№3</strong></td><td>Remote workers</td><td>Большой объём спроса, хороший вход через квизы, чек-листы и диагностику</td><td>Тест страны и программы</td></tr><tr><td><strong>№4</strong></td><td>Люди уже в Европе</td><td>Горячая аудитория: продление, ПМЖ, гражданство, смена основания</td><td>Проверка статуса и плана действий</td></tr><tr><td><strong>№5</strong></td><td>Рациональные клиенты</td><td>Горячая стадия выбора консультанта: нужны кейсы, отзывы, договор и прозрачный процесс</td><td>Диагностика + доказательства доверия</td></tr></tbody></table></div></section>
+
+      <section id="pains"><div class="section-head"><div class="section-number">09</div><div><h2>Боли аудитории</h2><p class="section-summary">Клиент приходит не за документом. Он приходит, потому что боится ошибиться в важном жизненном решении.</p></div></div><div class="grid two"><div class="card"><h3>Не понимаю</h3><ul class="plain-list"><li>Какая страна мне подходит</li><li>Какую программу выбрать</li><li>С чего начать</li><li>Какие документы нужны</li><li>Какие сроки, бюджет и налоговые последствия реальны</li></ul></div><div class="card"><h3>Боюсь</h3><ul class="plain-list"><li>Отказа</li><li>Потерять деньги</li><li>Переехать и не адаптироваться</li><li>Выбрать неправильный путь</li><li>Довериться иммиграционному агентству без доказательств</li></ul></div></div><div class="quote">“Я хочу легально переехать или сохранить статус в Европе, но не понимаю, какой маршрут подходит именно мне.”</div></section>
+
+      <section id="motivations"><div class="section-head"><div class="section-number">10</div><div><h2>Мотивации аудитории</h2><p class="section-summary">Клиент покупает не иммиграционную услугу, а контроль над будущим.</p></div></div><div class="grid four"><div class="card"><h3>Статус</h3><p>Получить законный статус в Европе, свободу передвижения и запасной план.</p></div><div class="card"><h3>Семья</h3><p>Обеспечить безопасность, образование детей, медицину и спокойную среду.</p></div><div class="card"><h3>Контроль</h3><p>Понять реальные варианты, бюджет, сроки и последовательность действий.</p></div><div class="card"><h3>Поддержка</h3><p>Переехать без хаоса, получить сопровождение под ключ, сэкономить время и нервы.</p></div></div><div class="quote">Перейти от тревоги и хаоса к понятному, законному и безопасному маршруту жизни в Европе.</div></section>
+
+      <section id="positioning"><div class="section-head"><div class="section-number">11</div><div><h2>Позиционирование</h2><p class="section-summary">Natlan должен позиционироваться не как агентство по ВНЖ, а как экспертная система сопровождения переезда и легализации.</p></div></div><div class="card dark"><h3>Формулировка позиционирования</h3><p>Natlan помогает людям, семьям, предпринимателям и удалённым специалистам выбрать реалистичный маршрут переезда, легализации или статуса в Европе: страна, основание, документы, сроки, бюджет, риски и дальнейшие шаги.</p></div><div class="grid three" style="margin-top: 18px;"><div class="card"><h3>Не продаём одну программу всем</h3><p>Начинаем с диагностики ситуации и честно говорим о рисках.</p></div><div class="card"><h3>Не обещаем решение госоргана</h3><p>Говорим юридически аккуратно: оценим, подготовим, сопроводим, снизим риск ошибок.</p></div><div class="card"><h3>Сопровождаем путь</h3><p>Учитываем семью, бизнес, доход, налоги, документы и адаптацию.</p></div></div><div class="quote">Сначала стратегия маршрута — потом документы.</div></section>
+
+      <section id="usp"><div class="section-head"><div class="section-number">12</div><div><h2>УТП</h2><p class="section-summary">Сильное УТП Natlan — не “оформим ВНЖ”, а “подберём реалистичный маршрут под вашу ситуацию”.</p></div></div><div class="quote">Подберём реалистичный маршрут переезда, легализации или статуса в Европе под вашу ситуацию: страна, основание, документы, сроки, бюджет, риски и дальнейшие шаги — без опасных обещаний и случайных решений.</div><div class="grid two"><div class="card"><h3>УТП для сегментов</h3><ul class="plain-list"><li>Для семей: дети, школа, медицина, бюджет и адаптация</li><li>Для предпринимателей: ВНЖ, бизнес, налоги, капитал и семья в одной стратегии</li><li>Для remote workers: доход, контракт или self-employed activity</li><li>Для людей уже в Европе: продление, смена основания, ПМЖ и гражданство</li><li>Для рациональных клиентов: честная оценка без обещаний невозможного</li></ul></div><div class="card soft"><h3>Главный рекламный смысл</h3><p>Не выбирайте страну вслепую — сначала проверьте маршрут.</p></div></div></section>
+
+      <section id="value"><div class="section-head"><div class="section-number">13</div><div><h2>Ценностное предложение</h2><p class="section-summary">Natlan превращает тревожный процесс переезда в понятный пошаговый маршрут.</p></div></div><div class="grid three"><div class="card"><h3>Что покупает клиент</h3><p>Ясность, безопасность, легальный статус, снижение риска отказа, экономию времени и спокойствие.</p></div><div class="card gold"><h3>Формула ценности</h3><p>От диагностики ситуации и выбора страны до документов, подачи, релокации и дальнейшего статуса.</p></div><div class="card"><h3>Главная трансформация</h3><p>Из “я не понимаю, как переехать” → в “я знаю свой маршрут, риски и следующий шаг”.</p></div></div></section>
+
+      <section id="communication"><div class="section-head"><div class="section-number">14</div><div><h2>Коммуникационная стратегия</h2><p class="section-summary">Коммуникация Natlan должна продавать не страну, а правильный подход к выбору маршрута.</p></div></div><div class="grid two"><div class="card"><h3>Главные сообщения</h3><ul class="plain-list"><li>Переезд начинается не с документов, а с выбора страны и основания</li><li>Универсальной программы не существует</li><li>Ошибки на старте могут стоить месяцев, денег и отказа</li><li>ВНЖ — это налоги, жильё, семья, работа и адаптация</li><li>Главное — выбрать программу, которая подходит именно вашей ситуации</li></ul></div><div class="card"><h3>Что доказываем</h3><ul class="plain-list"><li>Natlan сопровождает весь путь переезда</li><li>Самостоятельная подача возможна, но риски нужно понимать заранее</li><li>Маршрут выбирается под ситуацию клиента</li><li>Клиент получает последовательность действий, а не набор советов</li></ul></div></div><div class="quote">Сначала маршрут — потом документы.</div></section>
+
+      <section id="tone"><div class="section-head"><div class="section-number">15</div><div><h2>Tone of Voice</h2><p class="section-summary">Natlan должен звучать как спокойный, честный и юридически аккуратный эксперт.</p></div></div><div class="grid three"><div class="card"><h3>Тон коммуникации</h3><p>Спокойный, экспертный, уверенный, человеческий, юридически аккуратный, без давления, без страха ради страха и без обещаний 100% результата.</p></div><div class="card"><h3>Нельзя говорить</h3><ul class="plain-list"><li>“Гарантируем ВНЖ”</li><li>“Переезд за 2 недели”</li><li>“Самая лёгкая страна”</li><li>“Точно получите гражданство”</li><li>“Успейте, пока не закрыли”</li></ul></div><div class="card"><h3>Нужно говорить</h3><ul class="plain-list"><li>“Оценим ваши шансы”</li><li>“Подберём реалистичный маршрут”</li><li>“Покажем риски заранее”</li><li>“Составим индивидуальную стратегию”</li><li>“Сопроводим на каждом этапе”</li></ul></div></div></section>
+
+      <section id="product-matrix"><div class="section-head"><div class="section-number">16</div><div><h2>Продуктовая матрица</h2><p class="section-summary">Natlan нужно продавать не одну услугу, а продуктовую лестницу от первого касания до долгосрочного статуса.</p></div></div><div class="strategy-map"><div class="stage"><b>1. Бесплатный вход</b><span>Квиз, чек-лист, гайд, таблица сравнения стран.</span></div><div class="stage"><b>2. Диагностика</b><span>Первичный разбор ситуации, страны, документов, сроков, бюджета и рисков.</span></div><div class="stage"><b>3. Индивидуальная стратегия</b><span>Roadmap переезда: страна, программа, документы, этапы, бюджет, риски.</span></div><div class="stage"><b>4. Сопровождение по стране</b><span>Португалия, Италия, Франция, Кипр, Греция, Великобритания.</span></div><div class="stage"><b>5. Full Support</b><span>Стратегия, документы, подача, релокация, интеграция.</span></div><div class="stage"><b>6. LTV-продукты</b><span>Продление, ПМЖ, гражданство, family reunification, annual status check-up.</span></div></div><div class="quote">Диагностика продаёт ясность. Стратегия продаёт маршрут. Сопровождение продаёт спокойствие.</div></section>
+
+      <section id="sales-funnel"><div class="section-head"><div class="section-number">17</div><div><h2>Воронка продаж</h2><p class="section-summary">Воронка Natlan должна быть системой доверия, квалификации и сопровождения, а не простой цепочкой “заявка → продажа”.</p></div></div><div class="strategy-map"><div class="stage"><b>1. Реклама / контент</b><span>Первый интерес и объяснение, почему нужен маршрут.</span></div><div class="stage"><b>2. Сайт / лендинг / квиз</b><span>Сегментация по цели, стране, бюджету, срокам и текущему статусу.</span></div><div class="stage"><b>3. Заявка</b><span>Контакт с понятным обещанием результата диагностики.</span></div><div class="stage"><b>4. Квалификация</b><span>Цель, документы, семья, доход, бюджет, срочность.</span></div><div class="stage"><b>5. Диагностика / стратегия</b><span>Первичная консультация и первый оплачиваемый шаг.</span></div><div class="stage"><b>6. Договор / LTV</b><span>КП, оплата, сопровождение, повторные услуги и рекомендации.</span></div></div><div class="note">Целевая логика: холодный интерес → квалифицированный лид → консультация → стратегия → сопровождение → LTV. Главный входной продукт — диагностика маршрута.</div></section>
+
+      <section id="lead-magnets"><div class="section-head"><div class="section-number">18</div><div><h2>Лид-магниты</h2><p class="section-summary">Лид-магниты должны не просто собирать контакты, а переводить клиента к мысли: “мне нужна диагностика маршрута”.</p></div></div><div class="grid two"><div class="card"><h3>Интерактивные входы</h3><ul class="plain-list"><li>Тест “Какая страна Европы подходит вам для переезда?”</li><li>Мини-аудит ситуации</li><li>20-минутный квалификационный звонок</li><li>Вебинар “Как выбрать страну для релокации в 2026 году”</li></ul></div><div class="card"><h3>PDF и материалы</h3><ul class="plain-list"><li>Чек-лист “10 ошибок при выборе иммиграционной программы”</li><li>Гайд “Как выбрать страну для ВНЖ в Европе”</li><li>Таблица сравнения: Португалия / Кипр / Италия / Франция / Греция / Великобритания</li><li>PDF “Пошаговый план переезда в Европу”</li></ul></div></div><div class="quote">Главный CTA: получить диагностику маршрута.</div></section>
+
+      <section id="site"><div class="section-head"><div class="section-number">19</div><div><h2>Структура сайта</h2><p class="section-summary">Сайт Natlan должен быть не визиткой, а sales-системой, которая сегментирует клиента и ведёт к диагностике.</p></div></div><div class="grid two"><div class="card"><h3>Главная страница</h3><ul class="plain-list"><li>Первый экран с оффером</li><li>Для кого услуга и какие страны</li><li>Какие задачи решаем</li><li>Как проходит работа и почему Natlan</li><li>Кейсы, отзывы, FAQ и форма заявки</li></ul></div><div class="card"><h3>Отдельные страницы</h3><ul class="plain-list"><li>ВНЖ в Португалии, на Кипре, в Италии, во Франции, в Греции</li><li>Релокация в Великобританию</li><li>Иммиграционная стратегия и консультация</li><li>Страницы для предпринимателей, семей, инвесторов, фрилансеров и тех, кто уже в Европе</li></ul></div></div><div class="note">Главный CTA сайта: получить диагностику маршрута.</div></section>
+
+      <section id="ads"><div class="section-head"><div class="section-number">20</div><div><h2>Рекламная стратегия и медиаплан</h2><p class="section-summary">Реклама должна вести не в “оставьте заявку на ВНЖ”, а в диагностику маршрута.</p></div></div><div class="grid four"><div class="stat"><b>40&nbsp;000€</b><span>рекламный бюджет / месяц</span></div><div class="stat"><b>400–500</b><span>лидов в месяц</span></div><div class="stat"><b>25–30</b><span>клиентов</span></div><div class="stat"><b>3,5–4,5x</b><span>ROAS</span></div></div><div class="table-wrap" style="margin-top: 24px;"><table><thead><tr><th>Канал</th><th>Роль</th><th>Оффер</th><th>Бюджет / фокус</th></tr></thead><tbody><tr><td><strong>Google Search</strong></td><td>Горячий спрос</td><td>Проверить маршрут по стране / услуге</td><td>10&nbsp;000&nbsp;€</td></tr><tr><td><strong>Яндекс Директ</strong></td><td>Русскоязычный спрос</td><td>ВНЖ Европа, переезд, продление</td><td>5&nbsp;000&nbsp;€</td></tr><tr><td><strong>Meta Ads / Instagram / Facebook</strong></td><td>Холодная и тёплая аудитория</td><td>Квиз, ошибки, семейный маршрут</td><td>10&nbsp;000&nbsp;€</td></tr><tr><td><strong>Telegram Ads</strong></td><td>Комьюнити и прогрев</td><td>Чек-листы, гайды, изменения правил</td><td>4&nbsp;000&nbsp;€</td></tr><tr><td><strong>YouTube Ads</strong></td><td>Доверие и ретаргетинг</td><td>Видео-разборы и экспертность</td><td>3&nbsp;000&nbsp;€</td></tr><tr><td><strong>Ретаргетинг</strong></td><td>Дожим тёплой аудитории</td><td>Следующий шаг — диагностика</td><td>5&nbsp;000&nbsp;€</td></tr><tr><td><strong>SEO / вебинары / партнёрства</strong></td><td>Альтернативный поток лидов</td><td>Выбор страны и стратегии</td><td>3&nbsp;000&nbsp;€</td></tr></tbody></table></div><div class="note">Главный рекламный оффер: проверьте, какой маршрут переезда, легализации или статуса в Европе подходит именно вашей ситуации.</div></section>
+
+      <section id="content"><div class="section-head"><div class="section-number">21</div><div><h2>Контент-стратегия</h2><p class="section-summary">Контент Natlan должен работать как экспертная система прогрева, а не просто набор полезных постов.</p></div></div><div class="grid three"><div class="card"><h3>Контентные рубрики</h3><p>Обзор стран, сравнение программ, ошибки клиентов, кейсы переезда, мифы, налоги, легализация, жизнь после переезда, образование, недвижимость, документы, сроки и FAQ.</p></div><div class="card"><h3>Роль контента</h3><p>Холодной аудитории объяснить, что нужен маршрут. Тёплой показать риски. Горячей доказать экспертность. Клиентам после консультации показать ценность сопровождения.</p></div><div class="card dark"><h3>Главный CTA</h3><p>Получить диагностику маршрута.</p></div></div><div class="grid three" style="margin-top: 18px;"><div class="card"><h3>YouTube</h3><p>Глубокие разборы стран, ошибок, изменений правил и кейсов.</p></div><div class="card"><h3>Telegram</h3><p>Оперативные обновления, прогрев, ответы на страхи и переход к диагностике.</p></div><div class="card"><h3>Instagram / Facebook</h3><p>Доверие, личная экспертность, кейсы и быстрые входы в заявку.</p></div></div></section>
+
+      <section id="kpi"><div class="section-head"><div class="section-number">22</div><div><h2>KPI</h2><p class="section-summary">Управлять нужно не количеством заявок, а всей воронкой до оплаты, сопровождения и повторных продаж. Оптимизировать нужно не CPL, а путь до платящего клиента.</p></div></div><div class="table-wrap"><table><thead><tr><th>KPI</th><th>Цель на 3-й месяц</th><th>Зачем считать</th></tr></thead><tbody><tr><td><strong>Заявки</strong></td><td>400–500</td><td>Достаточный верх воронки</td></tr><tr><td><strong>Qualified leads</strong></td><td>150–190</td><td>Качество трафика и оффера</td></tr><tr><td><strong>Консультации</strong></td><td>70–90</td><td>Переход к монетизации экспертности</td></tr><tr><td><strong>Клиенты</strong></td><td>25–30</td><td>Целевой коммерческий результат</td></tr><tr><td><strong>Средний чек</strong></td><td>6&nbsp;000&nbsp;€</td><td>Контроль продуктовой матрицы</td></tr><tr><td><strong>Выручка</strong></td><td>150&nbsp;000–180&nbsp;000&nbsp;€</td><td>Финальный результат системы</td></tr><tr><td><strong>CAC</strong></td><td>1&nbsp;200–1&nbsp;600&nbsp;€</td><td>Допустимый уровень при среднем чеке 6&nbsp;000&nbsp;€</td></tr><tr><td><strong>ROMI</strong></td><td>250–350%</td><td>Окупаемость маркетинга</td></tr></tbody></table></div><div class="note">Основные KPI дополнительно: стоимость заявки, стоимость qualified lead, конверсия в консультацию, конверсия в оплату, повторные продажи, рекомендации и доля заявок по каждой стране.</div></section>
+
+      <section id="roadmap"><div class="section-head"><div class="section-number">23</div><div><h2>Дорожная карта</h2><p class="section-summary">Стратегию нужно внедрять поэтапно: сначала упаковка и инфраструктура, потом тест, затем масштабирование.</p></div></div><div class="timeline"><div class="timeline-item"><h4>Месяц 1</h4><p>Аудит продукта, рынок и конкуренты, сегментация, позиционирование, УТП, продуктовая матрица, структура сайта, CRM-воронка и KPI-система.</p></div><div class="timeline-item"><h4>Месяц 2</h4><p>Лендинги, аналитика, реклама, лид-магниты, контент, тест офферов и первые продажи.</p></div><div class="timeline-item"><h4>Месяц 3</h4><p>Анализ качества лидов, доработка скриптов продаж, email / messenger-воронка, ретаргетинг и масштабирование лучших связок.</p></div><div class="timeline-item"><h4>Месяцы 4–6</h4><p>SEO, YouTube, Telegram, вебинары, партнёрства, бренд, CRM-автоматизация и LTV-продукты.</p></div></div></section>
+
+      <section id="risks"><div class="section-head"><div class="section-number">24</div><div><h2>Риски и план Б</h2><p class="section-summary">В immigration marketing нельзя зависеть от одной страны, одной программы, одного канала и одного обещания.</p></div></div><div class="risk-grid"><div class="risk-item"><strong>Изменение законодательства</strong><p>Делать акцент не на конкретной стране, а на подборе стратегии; быстро обновлять контент при изменениях.</p></div><div class="risk-item"><strong>Высокая конкуренция и недоверие</strong><p>Усиливать доверие через кейсы, отзывы, экспертность, прозрачный процесс и честную диагностику.</p></div><div class="risk-item"><strong>Некачественные лиды</strong><p>Внедрить квалификацию, фильтр бюджета, CRM-статусы и платную диагностику как точку отбора.</p></div><div class="risk-item"><strong>Длинный цикл сделки</strong><p>Использовать ретаргетинг, email / messenger-прогрев, повторные касания и контент после консультации.</p></div><div class="risk-item"><strong>Завышенные ожидания</strong><p>Не обещать результат госоргана; продавать оценку, маршрут, подготовку, сопровождение и снижение риска ошибок.</p></div><div class="risk-item"><strong>Зависимость от рекламы</strong><p>Развивать SEO, YouTube, Telegram, вебинары, партнёрства и рекомендации параллельно с performance-каналами.</p></div></div><div class="quote">Natlan должен продавать не обещание ВНЖ, а экспертный путь: диагностика → стратегия → сопровождение → долгосрочный статус в Европе.</div></section>
+    </main>
+  </div>
+
+  <script>
+    const progress = document.getElementById('progress');
+    const links = Array.from(document.querySelectorAll('.side-nav a'));
+    const sections = links
+      .map((link) => document.querySelector(link.getAttribute('href')))
+      .filter(Boolean);
+
+    function updateProgress() {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.width = `${Math.min(100, (scrollTop / docHeight) * 100)}%`;
+
+      let activeId = sections[0]?.id;
+      sections.forEach((section) => {
+        if (section.getBoundingClientRect().top <= 140) activeId = section.id;
+      });
+
+      links.forEach((link) => {
+        link.classList.toggle('active', link.getAttribute('href') === `#${activeId}`);
+      });
+    }
+
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+  </script>
+</body>
+</html>
