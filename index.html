@@ -1,0 +1,871 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NATLAN · Маркетинговая стратегия на 3 месяца</title>
+  <meta name="description" content="Маркетинговая стратегия NATLAN на 3 месяца: лидогенерация, каналы, бюджет, цели и план запуска.">
+  <style>
+    :root {
+      --ink: #242424;
+      --muted: #6f6a64;
+      --paper: #fffdf8;
+      --soft: #f7f4ef;
+      --line: #ddd2c2;
+      --gold: #c6a87b;
+      --gold-soft: #e8dbc6;
+      --accent: #e52b50;
+      --white: #ffffff;
+      --shadow: 0 20px 50px rgba(36, 36, 36, 0.08);
+      --radius: 6px;
+      --max: 1160px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Inter, Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+    }
+
+    a {
+      color: inherit;
+      text-decoration-color: var(--gold);
+      text-underline-offset: 4px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(255, 253, 248, 0.94);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .brand span {
+      color: var(--gold);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .links a {
+      text-decoration: none;
+    }
+
+    .links a:hover {
+      color: var(--ink);
+    }
+
+    .hero {
+      max-width: var(--max);
+      margin: 0 auto;
+      min-height: 640px;
+      padding: 86px 24px 64px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 28px;
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      letter-spacing: 0;
+      line-height: 1.08;
+    }
+
+    h1 {
+      font-size: clamp(48px, 7vw, 86px);
+      max-width: 800px;
+      font-weight: 700;
+    }
+
+    h2 {
+      font-size: clamp(34px, 4.6vw, 58px);
+      font-weight: 650;
+    }
+
+    h3 {
+      font-size: 24px;
+      font-weight: 650;
+    }
+
+    .lead {
+      margin: 34px 0 0;
+      max-width: 760px;
+      color: var(--muted);
+      font-size: clamp(20px, 2.3vw, 27px);
+    }
+
+    .gold-rule {
+      width: 160px;
+      height: 3px;
+      background: var(--gold);
+      margin: 34px 0;
+    }
+
+    .hero-card {
+      min-height: 520px;
+      background: var(--ink);
+      color: var(--white);
+      padding: 48px 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+    }
+
+    .hero-card .label {
+      color: var(--gold);
+      text-align: center;
+      font-size: 24px;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-card .promise {
+      text-align: center;
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1.18;
+    }
+
+    .hero-card .metric {
+      text-align: center;
+      font-size: 31px;
+      font-weight: 700;
+      line-height: 1.12;
+    }
+
+    section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 84px 24px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(260px, 0.58fr);
+      gap: 48px;
+      align-items: end;
+      margin-bottom: 44px;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 20px;
+    }
+
+    .grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .card {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 30px;
+      min-height: 180px;
+    }
+
+    .card.dark {
+      background: var(--ink);
+      color: var(--white);
+      border-color: var(--ink);
+    }
+
+    .card .kicker {
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      font-size: 12px;
+      margin-bottom: 18px;
+    }
+
+    .card p {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .card.dark p {
+      color: #e6dfd4;
+    }
+
+    .strategy-line {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .step {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      min-height: 132px;
+      padding: 22px 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .step strong {
+      font-size: 20px;
+      line-height: 1.18;
+    }
+
+    .step span {
+      color: var(--gold);
+      font-weight: 700;
+      font-size: 22px;
+    }
+
+    .step.final {
+      background: var(--ink);
+      color: var(--white);
+      border-color: var(--ink);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--white);
+      border: 1px solid var(--line);
+      font-size: 16px;
+    }
+
+    th {
+      background: var(--ink);
+      color: var(--white);
+      text-align: left;
+      font-weight: 650;
+      padding: 16px 18px;
+    }
+
+    td {
+      padding: 17px 18px;
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      vertical-align: top;
+    }
+
+    td:first-child {
+      color: var(--ink);
+      font-weight: 650;
+    }
+
+    tr:nth-child(even) td {
+      background: var(--soft);
+    }
+
+    .months {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 28px;
+    }
+
+    .month {
+      border: 1px solid var(--line);
+      background: var(--soft);
+      border-radius: var(--radius);
+      padding: 34px 30px;
+      min-height: 330px;
+    }
+
+    .month.active {
+      background: var(--ink);
+      color: var(--white);
+      border-color: var(--ink);
+    }
+
+    .month .num {
+      color: var(--gold);
+      font-size: 20px;
+      font-weight: 650;
+      margin-bottom: 34px;
+    }
+
+    .month p {
+      color: var(--muted);
+      font-size: 18px;
+      margin-top: 26px;
+    }
+
+    .month.active p {
+      color: #e7e0d6;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+
+    .week {
+      display: grid;
+      grid-template-columns: 96px 1fr 1fr;
+      gap: 20px;
+      padding: 22px;
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .week strong {
+      color: var(--gold);
+      font-size: 20px;
+    }
+
+    .week p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .budget-note {
+      margin-top: 28px;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .final {
+      background: var(--ink);
+      color: var(--white);
+      max-width: none;
+      padding: 96px 24px;
+    }
+
+    .final .inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 0.85fr 1fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .final p {
+      color: #e7e0d6;
+      font-size: 22px;
+      margin: 28px 0 0;
+    }
+
+    .final .gold-rule {
+      margin-top: 0;
+    }
+
+    @media (max-width: 900px) {
+      .links {
+        display: none;
+      }
+
+      .hero,
+      .section-head,
+      .final .inner {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        gap: 36px;
+        padding-top: 58px;
+      }
+
+      .hero-card {
+        min-height: 360px;
+      }
+
+      .grid.two,
+      .grid.three,
+      .months,
+      .strategy-line {
+        grid-template-columns: 1fr;
+      }
+
+      .week {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav" aria-label="Навигация">
+      <div class="brand">NATLAN <span>strategy</span></div>
+      <div class="links">
+        <a href="#context">Контекст</a>
+        <a href="#idea">Идея</a>
+        <a href="#goals">Цели</a>
+        <a href="#channels">Каналы</a>
+        <a href="#plan">План</a>
+        <a href="#budget">Бюджет</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <div class="eyebrow">NATLAN · маркетинговая стратегия</div>
+        <h1>Маркетинговая стратегия на 3 месяца</h1>
+        <div class="gold-rule"></div>
+        <p class="lead">Как выстроить управляемую систему привлечения 30–60 оплаченных клиентов в месяц с рекламы для премиальных услуг иммиграции, бизнес-релокации и инвестиций.</p>
+      </div>
+      <aside class="hero-card" aria-label="Ключевой фокус">
+        <div class="label">OSEWA</div>
+        <div class="promise">забота<br>как основа<br>доверия</div>
+        <div class="gold-rule"></div>
+        <div class="metric">30–60<br>клиентов<br>в месяц</div>
+      </aside>
+    </section>
+
+    <section id="context">
+      <div class="section-head">
+        <h2>Контекст и проблема</h2>
+        <p>NATLAN уже имеет экспертизу, команду, контент и сильный продукт. Главная задача — собрать это в измеримую систему привлечения клиентов.</p>
+      </div>
+      <div class="grid two">
+        <article class="card">
+          <div class="kicker">Актив</div>
+          <h3>Комплексный продукт</h3>
+          <p>Иммиграция, бизнес, недвижимость, инвестиции и адаптация закрывают не один документ, а весь маршрут клиента.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">Актив</div>
+          <h3>Локальность в Бельгии</h3>
+          <p>Брюссель, русскоязычная поддержка и личный бренд усиливают доверие в сравнении с безличными глобальными игроками.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">Пробел</div>
+          <h3>Нет единой performance-системы</h3>
+          <p>Нужны сегментные посадочные, рекламные связки, аналитика, прогрев и регулярная оптимизация по качеству лидов.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">Риск</div>
+          <h3>Нельзя продавать обещания</h3>
+          <p>В нише иммиграции важно не обещать гарантированный результат, а продавать честную диагностику и легальный маршрут.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Что показал анализ</h2>
+        <p>Аудитория покупает не “ВНЖ”. Она покупает безопасность, предсказуемость и сопровождение в новой стране.</p>
+      </div>
+      <div class="grid four grid two">
+        <article class="card">
+          <div class="kicker">Семьи</div>
+          <h3>Будущее детей и спокойствие</h3>
+          <p>Нужен понятный маршрут: страна, документы, школа, язык, жилье, адаптация.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">Предприниматели</div>
+          <h3>Бизнес и статус в Европе</h3>
+          <p>Ключевая ценность — компания, счета, налоги, ВНЖ и релокация семьи или команды.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">Инвесторы</div>
+          <h3>Капитал и недвижимость</h3>
+          <p>Нужна проверка объекта, юридическая чистота сделки и связь с релокационной стратегией.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">Уже в Европе</div>
+          <h3>Срочная легализация</h3>
+          <p>Самый горячий спрос: заканчивается статус, есть дедлайн, нужна честная оценка вариантов.</p>
+        </article>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Конкурентная картина</h2>
+        <p>Глобальные игроки сильны шириной программ и SEO. NATLAN может выигрывать локальностью, русским языком, заботой и комплексностью.</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Поле</th>
+            <th>Как продает рынок</th>
+            <th>Отстройка NATLAN</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Глобальные компании</td>
+            <td>Программы, паспорта, golden visa, инвестиционные пороги.</td>
+            <td>Персональный маршрут, Бельгия, Брюссель, русскоязычная команда.</td>
+          </tr>
+          <tr>
+            <td>Локальные юристы</td>
+            <td>Узкая юридическая услуга и консультация.</td>
+            <td>Документы + бизнес + недвижимость + адаптация.</td>
+          </tr>
+          <tr>
+            <td>Риелторы</td>
+            <td>Объект недвижимости как основной продукт.</td>
+            <td>Инвестиционная и релокационная стратегия с юридической защитой.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="idea">
+      <div class="section-head">
+        <h2>Стратегическая идея</h2>
+        <p>NATLAN — премиальный русскоязычный проводник в Бельгии и Европе: от диагностики маршрута до документов, бизнеса, недвижимости и адаптации.</p>
+      </div>
+      <div class="grid three">
+        <article class="card dark">
+          <div class="kicker">Позиция</div>
+          <h3>Маршрут вместо программы</h3>
+          <p>Сначала диагностика и честная оценка, потом стратегия, документы и сопровождение.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">Принцип</div>
+          <h3>Легальность без серых схем</h3>
+          <p>Не обещать решение государства. Обещать профессиональную работу и снижение риска ошибок.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">Тон</div>
+          <h3>Забота и доверие</h3>
+          <p>Философия OSEWA: комфорт, безопасность, внимание к деталям и поддержка на каждом этапе.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="goals">
+      <div class="section-head">
+        <h2>Цели на 3 месяца</h2>
+        <p>Финальная цель — 30–60 оплаченных клиентов в месяц с рекламы. Лиды, консультации и CPL — промежуточные метрики.</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Уровень</th>
+            <th>Цель</th>
+            <th>Как измеряем</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Бизнес</td>
+            <td>30–60 оплаченных клиентов в месяц с рекламы.</td>
+            <td>CAC, выручка, LTV.</td>
+          </tr>
+          <tr>
+            <td>Маркетинг</td>
+            <td>Стабильный поток qualified leads.</td>
+            <td>CPL qualified, конверсия лендинга, качество заявки.</td>
+          </tr>
+          <tr>
+            <td>Операционно</td>
+            <td>Запустить каналы, офферы, посадочные и прогрев.</td>
+            <td>План-факт по неделям.</td>
+          </tr>
+          <tr>
+            <td>Оптимизация</td>
+            <td>Понять, какие связки можно масштабировать.</td>
+            <td>CPL/CAC по каналам и сегментам.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Система привлечения</h2>
+        <p>Премиальная услуга редко покупается с одного касания. Нужна связка горячего спроса, доверия, прогрева и повторного контакта.</p>
+      </div>
+      <div class="strategy-line">
+        <div class="step"><span>01</span><strong>Горячий поиск</strong></div>
+        <div class="step"><span>02</span><strong>Сегментные посадочные</strong></div>
+        <div class="step"><span>03</span><strong>Диагностика / лид-магнит</strong></div>
+        <div class="step"><span>04</span><strong>Прогрев и ретаргетинг</strong></div>
+        <div class="step final"><span>05</span><strong>30–60 клиентов/мес</strong></div>
+      </div>
+    </section>
+
+    <section id="channels">
+      <div class="section-head">
+        <h2>Ключевые направления</h2>
+        <p>Каждый канал отвечает за свою часть воронки: спрос, охват, доверие, прогрев или масштабирование.</p>
+      </div>
+      <div class="grid three">
+        <article class="card">
+          <div class="kicker">01</div>
+          <h3>Google / Яндекс</h3>
+          <p>Горячий спрос по ВНЖ, Бельгии, бизнес-иммиграции, легализации и недвижимости.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">02</div>
+          <h3>Meta / TikTok / YouTube</h3>
+          <p>Видео, Reels, lead forms, тесты креативов, расширение охвата и прогрев.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">03</div>
+          <h3>Контент-завод</h3>
+          <p>Reels, Shorts, Telegram, YouTube, вебинары, кейсы и доверие через экспертность.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">04</div>
+          <h3>Ретаргетинг и email</h3>
+          <p>Возврат теплой аудитории, прогрев после лид-магнитов, lookalike по качественным лидам.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">05</div>
+          <h3>SEO и партнерства</h3>
+          <p>Долгий спрос, Telegram, брокеры, бизнес-клубы, релокационные и налоговые партнеры.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">06</div>
+          <h3>Аналитика</h3>
+          <p>UTM, пиксели, CPL, CPL qualified, CAC-ориентир и решения по данным.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="plan">
+      <div class="section-head">
+        <h2>План по месяцам</h2>
+        <p>Сначала управляемость, затем тесты, затем масштабирование. Это снижает риск сжечь бюджет на неподготовленной системе.</p>
+      </div>
+      <div class="months">
+        <div class="month">
+          <div class="num">Месяц 1</div>
+          <h3>Фундамент и первые запуски</h3>
+          <div class="gold-rule"></div>
+          <p>Аналитика, офферы, посадочные, Google/Yandex, первые Reels и сбор первых данных.</p>
+        </div>
+        <div class="month active">
+          <div class="num">Месяц 2</div>
+          <h3>Тесты и оптимизация</h3>
+          <div class="gold-rule"></div>
+          <p>Meta, TikTok, YouTube, LinkedIn, ретаргетинг, email, Telegram, вебинар и A/B-тесты.</p>
+        </div>
+        <div class="month">
+          <div class="num">Месяц 3</div>
+          <h3>Масштабирование</h3>
+          <div class="gold-rule"></div>
+          <p>Бюджет на победителей, lookalike, SEO, партнерства, медиаплан следующего цикла.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Декомпозиция по неделям</h2>
+        <p>Каждая неделя заканчивается конкретным результатом и решением: что запускать, что отключать, что масштабировать.</p>
+      </div>
+      <div class="timeline">
+        <div class="week"><strong>1</strong><p>KPI, сегменты, географии, 5 офферов, UTM-структура.</p><p>Решение: какие сегменты идут в первый запуск.</p></div>
+        <div class="week"><strong>2</strong><p>MVP посадочных, лид-магниты, семантика, пиксели, контент-план.</p><p>Решение: запускать трафик только на сегментные входы.</p></div>
+        <div class="week"><strong>3</strong><p>Google Search, Яндекс, Reels/Shorts, первый маркетинговый отчет.</p><p>Решение: какие запросы отключить сразу.</p></div>
+        <div class="week"><strong>4</strong><p>Оптимизация поиска, lead forms, paid social креативы, первые темы-победители.</p><p>Решение: какие офферы пускать в paid social.</p></div>
+        <div class="week"><strong>5</strong><p>Расширение поиска, ретаргетинг, email/мессенджерная цепочка, A/B-тест форм.</p><p>Решение: увеличивать поиск или держать тестовый режим.</p></div>
+        <div class="week"><strong>6</strong><p>Meta, TikTok, YouTube, Telegram, SEO-кластеры.</p><p>Решение: какие каналы держать в тесте еще 7 дней.</p></div>
+        <div class="week"><strong>7</strong><p>Кейсы, FAQ, LinkedIn B2B, вебинар, lookalike-сегменты.</p><p>Решение: выбрать 2–3 основных направления для месяца 3.</p></div>
+        <div class="week"><strong>8</strong><p>A/B-тест посадочных, обновление креативов, фокус бюджета, партнерский pipeline.</p><p>Решение: какие кампании готовы к scale test.</p></div>
+        <div class="week"><strong>9</strong><p>Масштабирование Google/Yandex, сегментный ретаргетинг, SEO-страницы.</p><p>Решение: продолжать рост бюджета или стабилизировать.</p></div>
+        <div class="week"><strong>10</strong><p>Email/ретаргетинг, SEO по бизнес-иммиграции, совместные эфиры.</p><p>Решение: какие партнерские источники развивать.</p></div>
+        <div class="week"><strong>11</strong><p>Controlled scale test, библиотека креативов, партнерский лид-оффер.</p><p>Решение: бюджет и канальный микс следующего месяца.</p></div>
+        <div class="week"><strong>12</strong><p>Маркетинговый отчет, медиаплан, лучшие связки, план масштабирования.</p><p>Решение: идти в агрессивный сценарий или закрепить рабочий.</p></div>
+      </div>
+    </section>
+
+    <section id="budget">
+      <div class="section-head">
+        <h2>Ресурсы и бюджет</h2>
+        <p>При среднем чеке 6000 EUR рабочий CAC — 900–1500 EUR. Бюджет должен считаться от клиента, а не от дешевого лида.</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Цель</th>
+            <th>Бюджет при CAC 900 EUR</th>
+            <th>Бюджет при CAC 1500 EUR</th>
+            <th>Комментарий</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>30 клиентов/мес</td>
+            <td>27 000 EUR/мес</td>
+            <td>45 000 EUR/мес</td>
+            <td>рабочий масштаб</td>
+          </tr>
+          <tr>
+            <td>60 клиентов/мес</td>
+            <td>54 000 EUR/мес</td>
+            <td>90 000 EUR/мес</td>
+            <td>агрессивный масштаб</td>
+          </tr>
+          <tr>
+            <td>Тестовый этап</td>
+            <td>10 000–20 000 EUR/мес</td>
+            <td>по каналам</td>
+            <td>данные и гипотезы</td>
+          </tr>
+          <tr>
+            <td>Ресурсы</td>
+            <td>performance · SMM · дизайн</td>
+            <td>аналитика · SEO · контент</td>
+            <td>единый ритм</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="budget-note">Масштабирование начинается только после того, как понятна связка: канал → qualified lead → клиент → CAC.</p>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Как принимаем решения</h2>
+        <p>Оптимизация строится не вокруг дешевого CPL, а вокруг качества заявок и способности канала приводить клиентов.</p>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Сигнал</th>
+            <th>Решение</th>
+            <th>Порог</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CPL стабилен, качество хорошее</td>
+            <td>Увеличивать бюджет</td>
+            <td>+20–30%</td>
+          </tr>
+          <tr>
+            <td>CPL вырос, качество не растет</td>
+            <td>Пауза или переработка связки</td>
+            <td>&gt;20% роста</td>
+          </tr>
+          <tr>
+            <td>Лидов много, qualified низкий</td>
+            <td>Ужесточить форму и оффер</td>
+            <td>по отчету</td>
+          </tr>
+          <tr>
+            <td>Органический ролик залетел</td>
+            <td>Усилить рекламой и сделать серию</td>
+            <td>3–5x охват</td>
+          </tr>
+          <tr>
+            <td>Лендинг ниже нормы</td>
+            <td>Тест первого экрана, CTA, формы</td>
+            <td>&lt;5% CR</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <div class="section-head">
+        <h2>Почему стратегия реалистична</h2>
+        <p>План опирается на существующие активы NATLAN и не требует начинать бренд с нуля.</p>
+      </div>
+      <div class="grid two">
+        <article class="card">
+          <div class="kicker">1</div>
+          <h3>Есть экспертность</h3>
+          <p>Наталья и команда уже имеют доверительный контент, опыт, кейсы и продуктовую глубину.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">2</div>
+          <h3>Есть спрос</h3>
+          <p>ВНЖ, бизнес-иммиграция, легализация и недвижимость — уже сформированные категории спроса.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">3</div>
+          <h3>Есть отстройка</h3>
+          <p>Бельгия, Брюссель, русский язык, забота и комплексное сопровождение.</p>
+        </article>
+        <article class="card">
+          <div class="kicker">4</div>
+          <h3>Есть контроль</h3>
+          <p>Каждый канал проходит через KPI, A/B-тест, CPL qualified и решение по масштабированию.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="final">
+      <div class="inner">
+        <div>
+          <div class="eyebrow">Итог</div>
+          <h2>Стратегия продает не рекламу, а управляемый путь к росту</h2>
+        </div>
+        <div>
+          <div class="gold-rule"></div>
+          <p>NATLAN может масштабировать привлечение, если соединить премиальное позиционирование, горячий поиск, контент доверия, сегментные посадочные, прогрев и строгую аналитику качества лидов.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
